@@ -28,6 +28,9 @@ export class BootScene extends Phaser.Scene {
     this.load.image('bear-girl', '/assets/BearGirl.png');
     this.load.image('bunny-girl', '/assets/BunnyGirl.png');
 
+    // Load logo
+    this.load.image('keko-cafe-logo', '/assets/keko-cafe-logo.png');
+
     // Load ingredient images
     this.load.image('galbi', '/assets/galbi.png');
     this.load.image('onion', '/assets/onion.png');

@@ -18,6 +18,7 @@ const availableIngredients = ['galbi', 'onion', 'green-onion', 'rice', 'pork', '
 export class RestaurantScene extends Phaser.Scene {
   private background!: Phaser.GameObjects.Image;
   private darkOverlay!: Phaser.GameObjects.Rectangle;
+  private logo!: Phaser.GameObjects.Image;
   private startButton!: Phaser.GameObjects.Container;
   private ingredientBar!: Phaser.GameObjects.Container;
   private orderDisplay!: Phaser.GameObjects.Container;
@@ -68,11 +69,21 @@ export class RestaurantScene extends Phaser.Scene {
     // Add dark overlay on top of characters
     this.darkOverlay = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.5);
 
+    // Add logo above the start button
+    this.logo = this.add.image(width / 2, height / 2 - 120, 'keko-cafe-logo');
+    this.logo.setDepth(1001);
+    // Scale logo if needed (adjust scale factor as desired)
+    const maxLogoWidth = 300;
+    if (this.logo.width > maxLogoWidth) {
+      this.logo.setScale(maxLogoWidth / this.logo.width);
+    }
+
     // Create start button (on top of overlay)
-    this.createStartButton(width / 2, height / 2);
+    this.createStartButton(width / 2, height / 2 + 80);
 
     // Use displayList ordering to ensure proper layering
     this.children.bringToTop(this.darkOverlay);
+    this.children.bringToTop(this.logo);
     this.children.bringToTop(this.startButton);
   }
 
@@ -138,6 +149,18 @@ export class RestaurantScene extends Phaser.Scene {
       alpha: 0,
       duration: 800,
       ease: 'Power2',
+    });
+
+    // Fade out and destroy the logo
+    this.tweens.add({
+      targets: this.logo,
+      alpha: 0,
+      scaleY: 0.8,
+      duration: 400,
+      ease: 'Power2',
+      onComplete: () => {
+        this.logo.destroy();
+      },
     });
 
     // Fade out and destroy the start button
