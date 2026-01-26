@@ -27,6 +27,14 @@ export class BootScene extends Phaser.Scene {
     // Load character sprites
     this.load.image('bear-girl', '/assets/BearGirl.png');
     this.load.image('bunny-girl', '/assets/BunnyGirl.png');
+
+    // Load ingredient images
+    this.load.image('galbi', '/assets/galbi.png');
+    this.load.image('onion', '/assets/onion.png');
+    this.load.image('green-onion', '/assets/green-onion.png');
+    this.load.image('rice', '/assets/rice.png');
+    this.load.image('pork', '/assets/pork.png');
+    this.load.image('veggies', '/assets/veggies.png');
   }
 
   create(): void {
