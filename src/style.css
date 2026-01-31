@@ -23,3 +23,49 @@ canvas {
   image-rendering: pixelated;
   image-rendering: crisp-edges;
 }
+
+/* Quiz input wrapper for proper centering */
+.quiz-input-wrapper {
+  position: relative;
+  width: 0;
+  height: 0;
+  overflow: visible;
+}
+
+/* Quiz input styling - Kawaii */
+.quiz-input {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 180px;
+  height: 70px;
+  font-family: Georgia, serif;
+  font-size: 40px;
+  font-weight: bold;
+  text-align: center;
+  border: 4px solid #ffb6c1;
+  border-radius: 18px;
+  background-color: #fff5f7;
+  color: #6a4060;
+  outline: none;
+  box-shadow: 0 5px 0 #ffd1dc, inset 0 2px 4px rgba(255, 182, 193, 0.2);
+  -moz-appearance: textfield;
+}
+
+/* Hide number input spinners */
+.quiz-input::-webkit-outer-spin-button,
+.quiz-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.quiz-input:focus {
+  border-color: #ff91a4;
+  background-color: #ffffff;
+  box-shadow: 0 5px 0 #ffd1dc, 0 0 15px rgba(255, 182, 193, 0.5), inset 0 2px 4px rgba(255, 182, 193, 0.2);
+}
+
+.quiz-input::placeholder {
+  color: #ddb6c1;
+}

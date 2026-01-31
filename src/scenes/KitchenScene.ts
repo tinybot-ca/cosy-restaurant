@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { QuizOverlay } from '../ui/QuizOverlay';
 
 interface Recipe {
   name: string;
@@ -23,6 +24,7 @@ export class KitchenScene extends Phaser.Scene {
   private selectedIngredients: Set<string> = new Set();
   private currentOrder: string = 'galbi-dinner';
   private ingredientContainers: Map<string, Phaser.GameObjects.Container> = new Map();
+  private quizOverlay: QuizOverlay | null = null;
 
   constructor() {
     super({ key: 'KitchenScene' });
@@ -32,6 +34,10 @@ export class KitchenScene extends Phaser.Scene {
     // Reset state
     this.selectedIngredients = new Set();
     this.ingredientContainers = new Map();
+    this.quizOverlay = null;
+
+    // Clean up quiz overlay when scene shuts down
+    this.events.on('shutdown', this.cleanup, this);
 
     const width = this.cameras.main.width;
     const height = this.cameras.main.height;
@@ -238,13 +244,24 @@ export class KitchenScene extends Phaser.Scene {
       selected.every((ing, i) => ing === required[i]);
 
     if (isCorrect) {
-      this.showResult(true);
+      this.startMultiplicationQuiz();
     } else {
       this.showResult(false);
     }
   }
 
-  private showResult(success: boolean): void {
+  private startMultiplicationQuiz(): void {
+    this.quizOverlay = new QuizOverlay(this, (stars: number) => {
+      this.onQuizComplete(stars);
+    });
+  }
+
+  private onQuizComplete(stars: number): void {
+    this.quizOverlay = null;
+    this.showResult(true, stars);
+  }
+
+  private showResult(success: boolean, stars?: number): void {
     const width = this.cameras.main.width;
     const height = this.cameras.main.height;
 
@@ -258,7 +275,7 @@ export class KitchenScene extends Phaser.Scene {
         const recipe = recipes[this.currentOrder];
         const message = `Success!\n${recipe.name} created!`;
 
-        const messageText = this.add.text(width / 2, height / 2 - 30, message, {
+        const messageText = this.add.text(width / 2, height / 2 - 50, message, {
           fontFamily: 'Georgia, serif',
           fontSize: '36px',
           color: '#5cb85c',
@@ -267,8 +284,21 @@ export class KitchenScene extends Phaser.Scene {
         messageText.setOrigin(0.5);
         messageText.setDepth(1001);
 
+        // Display star rating if provided
+        if (stars !== undefined) {
+          const starDisplay = this.getStarDisplay(stars);
+          const starsText = this.add.text(width / 2, height / 2 + 30, starDisplay, {
+            fontFamily: 'Georgia, serif',
+            fontSize: '42px',
+            color: '#f4d03f',
+            align: 'center',
+          });
+          starsText.setOrigin(0.5);
+          starsText.setDepth(1001);
+        }
+
         // Return to restaurant scene after showing message
-        this.time.delayedCall(2000, () => {
+        this.time.delayedCall(2500, () => {
           this.scene.start('RestaurantScene');
         });
       });
@@ -302,6 +332,19 @@ export class KitchenScene extends Phaser.Scene {
       box.setFillStyle(0xf6e7e7);
       box.setStrokeStyle(2, 0xd4a5a5);
     });
+  }
+
+  private getStarDisplay(stars: number): string {
+    const filled = '\u2605'; // ★
+    const empty = '\u2606';  // ☆
+    return filled.repeat(stars) + empty.repeat(5 - stars);
+  }
+
+  private cleanup(): void {
+    if (this.quizOverlay) {
+      this.quizOverlay.destroy();
+      this.quizOverlay = null;
+    }
   }
 
   private playBurstAnimation(videoKey: string, onComplete: () => void): void {
