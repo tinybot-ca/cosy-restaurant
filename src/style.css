@@ -7,16 +7,23 @@
 html, body {
   width: 100%;
   height: 100%;
+  height: 100dvh; /* Dynamic viewport height for mobile */
   overflow: hidden;
   background-color: #1a1a2e;
+  /* Handle safe areas for notched devices */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Prevent pull-to-refresh and overscroll on mobile */
+body {
+  overscroll-behavior: none;
+  touch-action: none;
 }
 
 #game-container {
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 100dvh;
 }
 
 canvas {
@@ -24,20 +31,11 @@ canvas {
   image-rendering: crisp-edges;
 }
 
-/* Quiz input wrapper for proper centering */
-.quiz-input-wrapper {
-  position: relative;
-  width: 0;
-  height: 0;
-  overflow: visible;
-}
-
 /* Quiz input styling - Kawaii */
 .quiz-input {
-  position: absolute;
+  position: fixed;
   left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   width: 180px;
   height: 70px;
   font-family: Georgia, serif;

@@ -175,13 +175,16 @@ export class QuizOverlay {
     this.questionText.setOrigin(0.5);
     this.container.add(this.questionText);
 
-    // Create DOM input element with proper centering wrapper
-    const inputHtml = '<div class="quiz-input-wrapper"><input type="number" class="quiz-input" maxlength="3" /></div>';
-    this.inputElement = this.scene.add.dom(centerX, height / 2 + 50).createFromHTML(inputHtml);
+    // Create DOM input element (CSS handles horizontal centering via position:fixed)
+    this.inputElement = this.scene.add.dom(0, height / 2 + 20, 'input');
     this.inputElement.setDepth(this.BASE_DEPTH + 1);
 
+    const inputEl = this.inputElement.node as HTMLInputElement;
+    inputEl.type = 'number';
+    inputEl.className = 'quiz-input';
+    inputEl.maxLength = 3;
+
     // Handle Enter key submission
-    const inputEl = this.inputElement.node.querySelector('input') as HTMLInputElement;
     inputEl.addEventListener('keydown', (e: KeyboardEvent) => {
       if (e.key === 'Enter') {
         this.submitAnswer();
@@ -341,7 +344,7 @@ export class QuizOverlay {
     this.progressBarFill.width = barWidth * progress;
 
     // Clear and focus input
-    const inputEl = this.inputElement.node.querySelector('input') as HTMLInputElement;
+    const inputEl = this.inputElement.node as HTMLInputElement;
     inputEl.value = '';
     inputEl.focus();
 
@@ -353,7 +356,7 @@ export class QuizOverlay {
   }
 
   private submitAnswer(): void {
-    const inputEl = this.inputElement.node.querySelector('input') as HTMLInputElement;
+    const inputEl = this.inputElement.node as HTMLInputElement;
     const userAnswer = inputEl.value.trim();
 
     // Don't accept empty input
@@ -393,7 +396,7 @@ export class QuizOverlay {
     this.feedbackText.setVisible(true);
 
     // Disable input temporarily
-    const inputEl = this.inputElement.node.querySelector('input') as HTMLInputElement;
+    const inputEl = this.inputElement.node as HTMLInputElement;
     inputEl.disabled = true;
 
     // Move to next question after 2 seconds
