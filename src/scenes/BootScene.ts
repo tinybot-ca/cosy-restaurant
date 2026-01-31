@@ -24,6 +24,9 @@ export class BootScene extends Phaser.Scene {
     // Load the restaurant background image
     this.load.image('restaurant-bg', '/assets/restaurant-bg.png');
 
+    // Load kitchen background image
+    this.load.image('kitchen-bg', '/assets/kitchen-bg.png');
+
     // Load character sprites
     this.load.image('bear-girl', '/assets/BearGirl.png');
     this.load.image('bunny-girl', '/assets/BunnyGirl.png');
@@ -38,6 +41,9 @@ export class BootScene extends Phaser.Scene {
     this.load.image('rice', '/assets/rice.png');
     this.load.image('pork', '/assets/pork.png');
     this.load.image('veggies', '/assets/veggies.png');
+
+    // Load burst animations
+    this.load.video('mei-burst', '/assets/burst-animations/mei-burst.mp4');
   }
 
   create(): void {
